@@ -9,7 +9,8 @@ import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles({
   paper: {
     display: "inline-block",
-    padding: "1rem"
+    padding: "1rem",
+    marginTop: "20vh"
   },
   button: {
     float: "right"

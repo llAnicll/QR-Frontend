@@ -72,11 +72,15 @@ export class App extends Component {
   }
 
   render() {
-    const { isSignedIn, username } = this.state;
+    const { isSignedIn, username, email } = this.state;
     return (
       <div className="App">
         {isSignedIn ? (
-          <GameHome username={username} logout={this.handleLogout.bind(this)} />
+          <GameHome
+            username={username}
+            email={email}
+            logout={this.handleLogout.bind(this)}
+          />
         ) : (
           <Home
             handleLogin={this.handleLogin}

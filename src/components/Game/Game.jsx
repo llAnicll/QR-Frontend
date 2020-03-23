@@ -1,12 +1,10 @@
 import React, { Component } from "react";
+import QrReader from "react-qr-scanner";
+import Fab from "@material-ui/core/Fab";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import QrReader from "react-qr-scanner";
-import Modal from "@material-ui/core/Modal";
-import { makeStyles } from "@material-ui/core/styles";
-import CheckIcon from "@material-ui/icons/Check";
-import ClearIcon from "@material-ui/icons/Clear";
-import Fab from "@material-ui/core/Fab";
+
+import GameButtons from "./Game Components/GameButtons";
 
 function rand() {
   return Math.round(Math.random() * 20) - 10;
@@ -21,18 +19,18 @@ export class Game extends Component {
       questions: [],
       answers: [],
       index: 0,
-      result: "",
-      modalView: true
+      result: ""
     };
 
     this.handleScan = this.handleScan.bind(this);
+    this.handleCheck = this.handleCheck.bind(this);
+    this.handleCancel = this.handleCancel.bind(this);
   }
 
   // handle qr scanner output
   handleScan(data) {
     this.setState({
-      result: data,
-      modalView: true
+      result: data
     });
   }
 
@@ -56,8 +54,12 @@ export class Game extends Component {
     }
   }
 
+  handleCancel(e) {
+    e.preventDefault();
+  }
+
   render() {
-    const { lives, score, index } = this.state;
+    const { lives, score, index, result } = this.state;
     const { questions } = this.props;
     const previewStyle = {
       height: 240,
@@ -66,13 +68,17 @@ export class Game extends Component {
 
     return (
       <div>
-        <Grid>
+        <Grid
+          container
+          direction="column"
+          justify="center"
+          alignItems="center"
+          spacing={3}
+        >
           <Grid item>
             <Typography variant="h6" component="h6">
               {lives} / 3
             </Typography>
-          </Grid>
-          <Grid item>
             <Typography variant="h6" component="h6">
               Score: {score}
             </Typography>
@@ -86,14 +92,26 @@ export class Game extends Component {
             />
           </Grid>
           <Grid item>
-            <Typography variant="h4" componenet="h4">
+            <Typography variant="h4" componenet="h4" gutterBottom="true">
               Question
             </Typography>
-            <Typography variant="h6" component="h6">
+            <Typography variant="h6" component="h6" gutterBottom="true">
               {questions[index]}
             </Typography>
           </Grid>
+          <Grid item>
+            <Typography variant="h4" componenet="h4" gutterBottom="true">
+              Answer
+            </Typography>
+            <Typography variant="h6" component="h6">
+              {result}
+            </Typography>
+          </Grid>
         </Grid>
+        <GameButtons
+          handleClear={this.handleClear}
+          handleCheck={this.handleCheck}
+        />
       </div>
     );
   }

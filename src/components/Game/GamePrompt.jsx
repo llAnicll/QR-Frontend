@@ -1,25 +1,30 @@
 import React from "react";
 import Fab from "@material-ui/core/Fab";
 import Grid from "@material-ui/core/Grid";
-import Chip from "@material-ui/core/Chip";
-import FaceIcon from "@material-ui/icons/Face";
 import { makeStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 
 const useStyles = makeStyles(theme => ({
   root: {
-    "& > *": {
-      margin: theme.spacing(0)
-    }
+    margin: theme.spacing(1)
   },
   extendedIcon: {
     marginRight: theme.spacing(1)
+  },
+  button: {
+    position: "fixed",
+    transform: "translate(-50%, -50%)",
+    bottom: "10vh",
+    left: "50%"
+  },
+  title: {
+    marginTop: "10vh"
   }
 }));
 
 export default function GamePrompt(props) {
   const classes = useStyles();
-  const { username } = props;
   return (
     <Grid
       container
@@ -29,15 +34,16 @@ export default function GamePrompt(props) {
       spacing={2}
     >
       <Grid item>
-        <Chip
-          variant="outlined"
-          color="primary"
-          label={username}
-          icon={<FaceIcon />}
-        />
+        <Typography variant="h4" component="h2" className={classes.title}>
+          NCM <br /> Scavenger Hunt
+        </Typography>
       </Grid>
       <Grid item>
-        <Fab variant="extended" onClick={props.handleStart}>
+        <Fab
+          variant="extended"
+          onClick={props.handleStart}
+          className={classes.button}
+        >
           <PlayArrowIcon className={classes.extendedIcon} />
           Start
         </Fab>

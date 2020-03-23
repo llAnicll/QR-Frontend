@@ -2,7 +2,6 @@ import React, { Component } from "react";
 
 // import components
 import Nav from "./Game/Nav";
-import Profile from "./Game/Profile";
 import GamePrompt from "./Game/GamePrompt";
 import Grid from "@material-ui/core/Grid";
 import Leaderboard from "./Game/Leaderboard";
@@ -10,6 +9,8 @@ import MenuButton from "./Game/MenuButton";
 import Game from "./Game/Game";
 import Fab from "@material-ui/core/Fab";
 import axios from "axios";
+
+import Status from "./Game/Status";
 
 export default class GameHome extends Component {
   constructor(props) {
@@ -37,12 +38,10 @@ export default class GameHome extends Component {
   handleStart(e) {
     e.preventDefault();
     this.setState({ page: "game" });
-    let arr = [];
     axios
       .get("http://localhost:5000/questions/getQuestion")
       .then(res => {
         res.data.forEach(q => {
-          console.log(q.question);
           this.setState({
             questions: this.state.questions.concat([q.question]),
             answers: this.state.answers.concat([q.answer])
@@ -66,59 +65,39 @@ export default class GameHome extends Component {
     switch (page) {
       case "main": // Prompt the user to login or register
         return (
-          <Grid
-            container
-            direction="column"
-            justify="center"
-            alignItems="center"
-            spacing={2}
-          >
-            <Grid item>
-              <GamePrompt username={username} handleStart={this.handleStart} />
+          <div>
+            <Status username={username} handleLogout={this.props.logout} />
+            <Grid
+              container
+              direction="column"
+              justify="center"
+              alignItems="center"
+              spacing={2}
+            >
+              <Grid item>
+                <GamePrompt handleStart={this.handleStart} />
+              </Grid>
             </Grid>
-            <Grid item>
-              <Fab variant="extended" onClick={this.props.logout}>
-                logout
-              </Fab>
-            </Grid>
-            <Grid item>
-              <Nav handleChange={this.handleChange} value={page} />
-            </Grid>
-          </Grid>
-        );
-      case "profile": // Profile page
-        return (
-          <Grid
-            container
-            direction="column"
-            justify="center"
-            alignItems="center"
-            spacing={2}
-          >
-            <Grid item>
-              <Profile />
-            </Grid>
-            <Grid item>
-              <Nav handleChange={this.handleChange} value={page} />
-            </Grid>
-          </Grid>
+            <Nav handleChange={this.handleChange} value={page} />
+          </div>
         );
       case "leaderboard": // ranks page
         return (
-          <Grid
-            container
-            direction="column"
-            justify="center"
-            alignItems="center"
-            spacing={2}
-          >
-            <Grid item>
-              <Leaderboard />
+          <div>
+            <Status username={username} handleLogout={this.props.logout} />
+            <Grid
+              container
+              direction="column"
+              justify="center"
+              alignItems="center"
+              spacing={2}
+            >
+              <Grid item>
+                <Leaderboard />
+              </Grid>
             </Grid>
-            <Grid item>
-              <Nav handleChange={this.handleChange} value={page} />
-            </Grid>
-          </Grid>
+            <Nav handleChange={this.handleChange} value={page} />
+          </div>
         );
       case "game":
         return (
