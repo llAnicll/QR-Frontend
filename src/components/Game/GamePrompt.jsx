@@ -16,10 +16,12 @@ const useStyles = makeStyles(theme => ({
     position: "fixed",
     transform: "translate(-50%, -50%)",
     bottom: "10vh",
-    left: "50%"
+    left: "50%",
+    backgroundColor: "#92278f"
   },
   title: {
-    marginTop: "10vh"
+    marginTop: "10vh",
+    color: "white"
   }
 }));
 

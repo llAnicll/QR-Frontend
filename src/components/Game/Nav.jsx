@@ -11,7 +11,11 @@ const useStyles = makeStyles({
     width: "100%",
     position: "fixed",
     bottom: 0,
-    marginBottom: "2vh"
+    marginBottom: "2vh",
+    backgroundColor: "rgba(255, 255, 255, 0)"
+  },
+  action: {
+    color: "#ffff"
   }
 });
 
@@ -27,11 +31,13 @@ export default function Nav(props) {
         label="Home"
         value="main"
         icon={<PlayCircleFilledTwoToneIcon />}
+        className={classes.action}
       />
       <BottomNavigationAction
         label="Leaderboard"
         value="leaderboard"
         icon={<LanguageTwoToneIcon />}
+        className={classes.action}
       />
     </BottomNavigation>
   );

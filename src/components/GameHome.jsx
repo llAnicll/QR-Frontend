@@ -5,9 +5,7 @@ import Nav from "./Game/Nav";
 import GamePrompt from "./Game/GamePrompt";
 import Grid from "@material-ui/core/Grid";
 import Leaderboard from "./Game/Leaderboard";
-import MenuButton from "./Game/MenuButton";
 import Game from "./Game/Game";
-import Fab from "@material-ui/core/Fab";
 import axios from "axios";
 
 import Status from "./Game/Status";
@@ -20,12 +18,16 @@ export default class GameHome extends Component {
       email: this.props.email,
       username: this.props.username,
       questions: [],
-      answers: []
+      answers: [],
+      lives: 3,
+      score: 0,
+      index: 0
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleStart = this.handleStart.bind(this);
     this.handleMenuButton = this.handleMenuButton.bind(this);
+    this.handleCheck = this.handleCheck.bind(this);
   }
 
   // handle nav change
@@ -59,8 +61,28 @@ export default class GameHome extends Component {
     this.setState({ page: "main" });
   }
 
+  // handle the confrim button press
+  handleCheck(e) {
+    e.preventDefault();
+    const { result, answers, index } = this.state;
+    if (this.state.result !== "") {
+      if (result === answers[index]) {
+        // When the user is correct
+        this.setState({
+          result: "",
+          index: index + 1
+        });
+      } else {
+        // When the user is incorrect
+        this.setState({ result: "" });
+      }
+    } else {
+      // the user did not scan an answer
+    }
+  }
+
   render() {
-    const { page, username, questions, answers } = this.state;
+    const { page, username, questions, answers, lives, score } = this.state;
 
     switch (page) {
       case "main": // Prompt the user to login or register
@@ -102,8 +124,18 @@ export default class GameHome extends Component {
       case "game":
         return (
           <div>
-            <MenuButton onClick={this.handleMenuButton} />
-            <Game questions={questions} answers={answers} />
+            <Status
+              username={username}
+              handleQuit={this.handleMenuButton}
+              page={this.state.page}
+              lives={lives}
+              score={score}
+            />
+            <Game
+              questions={questions}
+              answers={answers}
+              handleCheck={this.handleCheck}
+            />
           </div>
         );
     }

@@ -11,8 +11,9 @@ const useStyles = makeStyles({
     marginBottom: "2vh"
   },
   title: {
-    marginTop: "20vh",
-    marginBottom: "50vh"
+    marginTop: "20%",
+    marginBottom: "50vh",
+    color: "white"
   },
   button: {
     width: "80%",

@@ -10,9 +10,9 @@ const useStyles = makeStyles({
     width: "100%",
     position: "fixed",
     bottom: 0,
-    marginBottom: "3vh",
+    marginBottom: "4vh",
     marginLeft: "auto",
-    marginRight: "autp"
+    marginRight: "auto"
   }
 });
 

@@ -6,16 +6,19 @@ import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 
+import Errors from "./Home Components/Errors";
+
 const useStyles = makeStyles({
   paper: {
     display: "inline-block",
     padding: "1rem",
-    marginTop: "20vh"
+    marginTop: "15vh"
   }
 });
 
 export default function RegisterForm(props) {
   const classes = useStyles();
+  const { errors } = props;
   return (
     <Paper elevation={3} className={classes.paper}>
       <Grid
@@ -30,6 +33,11 @@ export default function RegisterForm(props) {
             Sign In
           </Typography>
         </Grid>
+        {errors.length > 0 ? (
+          <Grid item>
+            <Errors errors={props.errors} />
+          </Grid>
+        ) : null}
         <Grid item>
           <TextField
             id="outlined-basic"
