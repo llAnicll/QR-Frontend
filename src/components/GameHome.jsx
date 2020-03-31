@@ -85,10 +85,13 @@ export default class GameHome extends Component {
     const { page, username, questions, answers, lives, score } = this.state;
 
     switch (page) {
-      case "main": // Prompt the user to login or register
+      case "main":
         return (
           <div>
-            <Status username={username} handleLogout={this.props.logout} />
+            <Status
+              username={username}
+              handleLogout={this.props.handleLogout}
+            />
             <Grid
               container
               direction="column"
@@ -106,7 +109,10 @@ export default class GameHome extends Component {
       case "leaderboard": // ranks page
         return (
           <div>
-            <Status username={username} handleLogout={this.props.logout} />
+            <Status
+              username={username}
+              handleLogout={this.props.handleLogout}
+            />
             <Grid
               container
               direction="column"

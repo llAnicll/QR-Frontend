@@ -20,7 +20,7 @@ export default function Cancel(props) {
       className={classes.margin}
       variant="extended"
       size="medium"
-      onclick={props.handleCancel}
+      onClick={props.handleCancel}
     >
       <ClearIcon className={classes.extendedIcon} />
       Cancel
