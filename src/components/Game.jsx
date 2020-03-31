@@ -1,14 +1,13 @@
 import React, { Component } from "react";
-
-// import components
-import Nav from "./Game/Nav";
-import GamePrompt from "./Game/GamePrompt";
-import Grid from "@material-ui/core/Grid";
-import Leaderboard from "./Game/Leaderboard";
-import Game from "./Game/Game";
 import axios from "axios";
+import { Container } from "@material-ui/core";
 
-import Status from "./Game/Status";
+// Components
+import Nav from "./Game Components/General Components/Nav";
+import AppBar from "./Game Components/General Components/AppBar";
+import Main from "./Game Components/Main";
+import Leaderboard from "./Game Components/Leaderboard";
+import Game from "./Game Components/Game Interface Components/Game Interface";
 
 export default class GameHome extends Component {
   constructor(props) {
@@ -23,21 +22,16 @@ export default class GameHome extends Component {
       score: 0,
       index: 0
     };
-
-    this.handleChange = this.handleChange.bind(this);
-    this.handleStart = this.handleStart.bind(this);
-    this.handleMenuButton = this.handleMenuButton.bind(this);
-    this.handleCheck = this.handleCheck.bind(this);
   }
 
   // handle nav change
-  handleChange(e, newValue) {
+  handleChange = (e, newValue) => {
     e.preventDefault();
     this.setState({ page: newValue });
-  }
+  };
 
   // handle start button click
-  handleStart(e) {
+  handleStart = e => {
     e.preventDefault();
     this.setState({ page: "game" });
     axios
@@ -53,84 +47,64 @@ export default class GameHome extends Component {
       .catch(err => {
         console.log("Error: " + err);
       });
-  }
+  };
 
   // handle the menu clicks
-  handleMenuButton(e) {
+  handleMenuButton = e => {
     e.preventDefault();
     this.setState({ page: "main" });
-  }
+  };
 
   // handle the confrim button press
-  handleCheck(e) {
+  handleCheck = e => {
     e.preventDefault();
     const { result, answers, index } = this.state;
     if (this.state.result !== "") {
       if (result === answers[index]) {
-        // When the user is correct
+        // Correct
         this.setState({
           result: "",
           index: index + 1
         });
       } else {
-        // When the user is incorrect
+        // Incorrect
         this.setState({ result: "" });
       }
     } else {
       // the user did not scan an answer
     }
-  }
+  };
 
   render() {
     const { page, username, questions, answers, lives, score } = this.state;
 
     switch (page) {
-      case "main":
+      case "main": // The main page where user can start the game
         return (
-          <div>
-            <Status
+          <Container maxWidth="xs">
+            <AppBar
               username={username}
               handleLogout={this.props.handleLogout}
             />
-            <Grid
-              container
-              direction="column"
-              justify="center"
-              alignItems="center"
-              spacing={2}
-            >
-              <Grid item>
-                <GamePrompt handleStart={this.handleStart} />
-              </Grid>
-            </Grid>
+            <Main handleStart={this.handleStart} />
             <Nav handleChange={this.handleChange} value={page} />
-          </div>
+          </Container>
         );
-      case "leaderboard": // ranks page
+      case "leaderboard": // Leaderboard Page
         return (
-          <div>
-            <Status
+          <Container maxWidth="xs">
+            <AppBar
               username={username}
               handleLogout={this.props.handleLogout}
             />
-            <Grid
-              container
-              direction="column"
-              justify="center"
-              alignItems="center"
-              spacing={2}
-            >
-              <Grid item>
-                <Leaderboard />
-              </Grid>
-            </Grid>
+            <Leaderboard />
             <Nav handleChange={this.handleChange} value={page} />
-          </div>
+          </Container>
         );
-      case "game":
+      case "game": // The actual game the user plays
         return (
-          <div>
-            <Status
+          <Container maxWidth="xs">
+            <AppBar
               username={username}
               handleQuit={this.handleMenuButton}
               page={this.state.page}
@@ -142,7 +116,7 @@ export default class GameHome extends Component {
               answers={answers}
               handleCheck={this.handleCheck}
             />
-          </div>
+          </Container>
         );
     }
   }

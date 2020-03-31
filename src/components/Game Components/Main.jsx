@@ -5,13 +5,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    margin: theme.spacing(1)
-  },
-  extendedIcon: {
-    marginRight: theme.spacing(1)
-  },
+const useStyles = makeStyles({
   button: {
     position: "fixed",
     transform: "translate(-50%, -50%)",
@@ -23,7 +17,7 @@ const useStyles = makeStyles(theme => ({
     marginTop: "10vh",
     color: "white"
   }
-}));
+});
 
 export default function GamePrompt(props) {
   const classes = useStyles();
@@ -46,7 +40,7 @@ export default function GamePrompt(props) {
           onClick={props.handleStart}
           className={classes.button}
         >
-          <PlayArrowIcon className={classes.extendedIcon} />
+          <PlayArrowIcon />
           Start
         </Fab>
       </Grid>

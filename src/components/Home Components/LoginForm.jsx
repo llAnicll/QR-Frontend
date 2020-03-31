@@ -8,7 +8,7 @@ import {
   makeStyles
 } from "@material-ui/core";
 
-import Errors from "./Errors";
+import Errors from "./General/Errors";
 
 const useStyles = makeStyles({
   paper: {
@@ -19,12 +19,12 @@ const useStyles = makeStyles({
 
 export default function RegisterForm(props) {
   const classes = useStyles();
-  const { errors } = props;
+  const { errors, handleLogin } = props;
   return (
     <Container maxWidth="xs">
       <Paper elevation={2} className={classes.paper}>
         <Typography variant="h4" component="h2">
-          Sign Up
+          Sign In
         </Typography>
 
         {errors.length > 0 ? <Errors errors={props.errors} /> : null}
@@ -36,17 +36,7 @@ export default function RegisterForm(props) {
           variant="outlined"
           fullWidth={true}
           margin="normal"
-          onChange={props.handleEmailChange}
-        />
-
-        <TextField
-          id="outlined-basic"
-          label="Username"
-          name="username"
-          variant="outlined"
-          fullWidth={true}
-          margin="normal"
-          onChange={props.handleUsernameChange}
+          onChange={props.handleChange}
         />
 
         <TextField
@@ -56,25 +46,16 @@ export default function RegisterForm(props) {
           variant="outlined"
           fullWidth={true}
           margin="normal"
-          onChange={props.handlePasswordChange}
-        />
-
-        <TextField
-          id="outlined-basic"
-          label="Re-type password"
-          name="passwordAgain"
-          variant="outlined"
-          fullWidth={true}
-          margin="normal"
-          onChange={props.handlePasswordAgainChange}
+          onChange={props.handleChange}
         />
         <br />
         <Button
           variant="contained"
           color="primary"
-          onClick={props.handleRegister}
+          className={classes.button}
+          onClick={handleLogin}
         >
-          Sign up
+          Login
         </Button>
       </Paper>
     </Container>

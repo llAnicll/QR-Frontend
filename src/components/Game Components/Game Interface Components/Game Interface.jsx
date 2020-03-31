@@ -4,7 +4,7 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 
-import GameButtons from "./Game Components/GameButtons";
+import GameButtons from "./GameButtons";
 
 export class Game extends Component {
   constructor(props) {
@@ -78,6 +78,7 @@ export class Game extends Component {
     );
   }
 }
+
 const useStyles = makeStyles({
   text: {
     color: "#ffff"

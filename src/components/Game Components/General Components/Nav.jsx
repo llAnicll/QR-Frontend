@@ -11,7 +11,6 @@ const useStyles = makeStyles({
     width: "100%",
     position: "fixed",
     bottom: 0,
-    marginBottom: "2vh",
     backgroundColor: "rgba(255, 255, 255, 0)"
   },
   action: {

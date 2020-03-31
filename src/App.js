@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import "./App.css";
 import axios from "axios";
+import validator from "validator";
 
 // import user components
 import Home from "./components/Home";
-import GameHome from "./components/GameHome";
-import LoginForm from "./components/LoginForm";
-import RegisterForm from "./components/RegisterForm";
+import GameHome from "./components/Game";
+import LoginForm from "./components/Home Components/LoginForm";
+import RegisterForm from "./components/Home Components/RegisterForm";
 
 export class App extends Component {
   constructor() {
@@ -25,7 +26,7 @@ export class App extends Component {
     };
   }
 
-  // Event handler for the login button on home prompt
+  // Handles the button the user presses to select login
   handleLoginBtn = () => {
     this.setState({ page: 2 });
   };
@@ -34,12 +35,12 @@ export class App extends Component {
     this.setState({ page: 3 });
   };
 
-  // Event handler for the change in value of text input
+  // Handles the button the user presses to select register
   handleChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  // handle the sign in state
+  // Handles the login
   handleLogin = e => {
     e.preventDefault();
     const { email, password } = this.state;
@@ -50,7 +51,7 @@ export class App extends Component {
     arr.forEach(el => {
       switch (el) {
         case "email":
-          if (email.length < 1) {
+          if (validator.isEmpty(email)) {
             this.setState({ emailErr: "No email entered" });
           } else {
             this.setState({ emailErr: "" });
@@ -58,7 +59,7 @@ export class App extends Component {
           }
           break;
         case "password":
-          if (password.length < 1) {
+          if (validator.isEmpty(password)) {
             this.setState({ passwordErr: "No email entered" });
           } else {
             this.setState({ passwordErr: "" });
@@ -111,15 +112,19 @@ export class App extends Component {
     arr.forEach(el => {
       switch (el) {
         case "email":
-          if (email.length < 1) {
+          if (validator.isEmpty(email)) {
             this.setState({ emailErr: "No email entered" });
           } else {
-            this.setState({ emailErr: "" });
-            emailFlag = true;
+            if (validator.isEmail(email)) {
+              this.setState({ emailErr: "" });
+              emailFlag = true;
+            } else {
+              this.setState({ emailErr: "Invalid email" });
+            }
           }
           break;
         case "username":
-          if (username.length < 1) {
+          if (validator.isEmpty(username)) {
             this.setState({ usernameErr: "No username entered" });
           } else {
             this.setState({ usernameErr: "" });
@@ -127,7 +132,7 @@ export class App extends Component {
           }
           break;
         case "password":
-          if (password.length < 1) {
+          if (validator.isEmpty(password)) {
             this.setState({ passwordErr: "No password entered" });
           } else {
             this.setState({ passwordErr: "" });
@@ -135,7 +140,7 @@ export class App extends Component {
           }
           break;
         case "passwordAgain":
-          if (passwordAgain.length < 1) {
+          if (validator.isEmpty(passwordAgain)) {
             this.setState({
               passwordAgainErr: "Please re-type password"
             });
@@ -208,21 +213,11 @@ export class App extends Component {
     } = this.state;
 
     const err = [];
-    if (emailErr.length > 0) {
-      err.push({ err: emailErr });
-    }
-    if (usernameErr.length > 0) {
-      err.push({ err: usernameErr });
-    }
-    if (passwordErr.length > 0) {
-      err.push({ err: passwordErr });
-    }
-    if (passwordAgainErr.length > 0) {
-      err.push({ err: passwordAgainErr });
-    }
-    if (serverError.length > 0) {
-      err.push({ err: serverError });
-    }
+    err.push({ err: emailErr });
+    err.push({ err: usernameErr });
+    err.push({ err: passwordErr });
+    err.push({ err: passwordAgainErr });
+    err.push({ err: serverError });
 
     switch (page) {
       case 1:
