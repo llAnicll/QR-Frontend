@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import QrReader from "react-qr-scanner";
+import QrReader from 'react-qr-reader'
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
@@ -13,36 +13,38 @@ export class Game extends Component {
       questions: [],
       answers: [],
       index: 0,
-      result: ""
+      result: "",
     };
 
-    this.handleScan = this.handleScan.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
   }
 
   // handle qr scanner output
-  handleScan(data) {
-    this.setState({
-      result: data
-    });
+  handleScan = data => {
+    if (data) {
+      this.setState({
+        result: data
+      })
+    }
   }
-
+  
   // handles qr scanner error
-  handleError(err) {
-    console.error(err);
+  handleError = err => {
+    console.error(err)
   }
 
   handleCancel(e) {
     e.preventDefault();
   }
 
+
   render() {
     const { index, result } = this.state;
     const { questions } = this.props;
     const previewStyle = {
       height: 240,
-      width: 320
-    };
+      width: 350,
+    }
     return (
       <div>
         <Grid
@@ -54,10 +56,10 @@ export class Game extends Component {
         >
           <Grid item>
             <QrReader
-              delay={this.state.delay}
-              style={previewStyle}
+              delay={300}
               onError={this.handleError}
               onScan={this.handleScan}
+              style={previewStyle}
             />
           </Grid>
           <Grid item>
