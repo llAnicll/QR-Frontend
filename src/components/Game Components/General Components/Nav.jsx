@@ -11,11 +11,12 @@ const useStyles = makeStyles({
     width: "100%",
     position: "fixed",
     bottom: 0,
-    backgroundColor: "rgba(255, 255, 255, 0)"
+    left: 0,
+    backgroundColor: "rgba(255, 255, 255, 0)",
   },
   action: {
-    color: "#ffff"
-  }
+    color: "#ffff",
+  },
 });
 
 export default function Nav(props) {

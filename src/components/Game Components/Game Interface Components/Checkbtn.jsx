@@ -3,26 +3,23 @@ import CheckIcon from "@material-ui/icons/Check";
 import Fab from "@material-ui/core/Fab";
 import { makeStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles(theme => ({
-  margin: {
-    margin: theme.spacing(1),
-    backgroundColor: "#92278f"
+const useStyles = makeStyles({
+  fab: {
+    backgroundColor: "#92278f",
+    marginLeft: "5%",
   },
-  extendedIcon: {
-    marginRight: theme.spacing(1)
-  }
-}));
+});
 
 export default function Check(props) {
   const classes = useStyles();
   return (
     <Fab
-      className={classes.margin}
+      className={classes.fab}
       variant="extended"
       size="medium"
-      onClick={props.handleClick}
+      onClick={props.handleCheck}
     >
-      <CheckIcon className={classes.extendedIcon} />
+      <CheckIcon />
       Check
     </Fab>
   );

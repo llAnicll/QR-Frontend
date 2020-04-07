@@ -8,17 +8,17 @@ import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   chip: {
-    marginRight: "auto"
+    marginRight: "auto",
   },
   lives: {
     marginRight: "auto",
-    color: "#ffff"
+    color: "#ffff",
   },
   exit: {
-    color: "#ffff"
-  }
+    color: "#ffff",
+  },
 }));
 
 export default function Status(props) {

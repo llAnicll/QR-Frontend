@@ -1,90 +1,86 @@
-import React, { Component } from "react";
-import QrReader from 'react-qr-reader'
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
+import React from "react";
+import QrReader from "react-qr-reader";
 import { makeStyles } from "@material-ui/core/styles";
+import { Container, Typography, Grid, Snackbar } from "@material-ui/core";
+import MuiAlert from "@material-ui/lab/Alert";
 
 import GameButtons from "./GameButtons";
+//import Alert from "@material-ui/lab/Alert";
 
-export class Game extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      questions: [],
-      answers: [],
-      index: 0,
-      result: "",
-    };
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
-    this.handleCancel = this.handleCancel.bind(this);
-  }
+function getWindowDimensions() {
+  const { innerWidth: width, innerHeight: height } = window;
+  return width;
+}
 
-  // handle qr scanner output
-  handleScan = data => {
-    if (data) {
-      this.setState({
-        result: data
-      })
-    }
-  }
-  
-  // handles qr scanner error
-  handleError = err => {
-    console.error(err)
-  }
+function calcWidth() {
+  return getWindowDimensions() * 0.75;
+}
 
-  handleCancel(e) {
-    e.preventDefault();
-  }
+const previewStyle = {
+  width: calcWidth(),
+};
 
-
-  render() {
-    const { index, result } = this.state;
-    const { questions } = this.props;
-    const previewStyle = {
-      height: 240,
-      width: 350,
-    }
-    return (
-      <div>
-        <Grid
-          container
-          direction="column"
-          justify="center"
-          alignItems="center"
-          spacing={3}
-        >
-          <Grid item>
-            <QrReader
-              delay={300}
-              onError={this.handleError}
-              onScan={this.handleScan}
-              style={previewStyle}
-            />
-          </Grid>
-          <Grid item>
-            <QuestionTitle />
-            <Question question={questions[index]} />
-          </Grid>
-
-          <Grid item>
-            <AnswerTitle />
-            <Answer result={result} />
-          </Grid>
+export default function Game(props) {
+  const { result, question, open, severity, feedback } = props;
+  const vertical = "top";
+  const horizontal = "center";
+  const {
+    handleCheck,
+    handleScan,
+    handleError,
+    handleClear,
+    handleClose,
+  } = props;
+  return (
+    <Container maxWidth="sm">
+      <Snackbar
+        open={open}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical, horizontal }}
+      >
+        <Alert onClose={handleClose} severity={severity}>
+          {feedback}
+        </Alert>
+      </Snackbar>
+      <Grid
+        container
+        direction="column"
+        justify="center"
+        alignItems="center"
+        spacing={3}
+      >
+        <Grid item>
+          <QrReader
+            delay={300}
+            onError={handleError}
+            onScan={handleScan}
+            style={previewStyle}
+          />
         </Grid>
-        <GameButtons
-          handleClear={this.handleClear}
-          handleCheck={this.props.handleCheck}
-        />
-      </div>
-    );
-  }
+        <Grid item>
+          <QuestionTitle />
+          <Question question={question} />
+        </Grid>
+
+        <Grid item>
+          <AnswerTitle />
+          <Answer result={result} />
+        </Grid>
+      </Grid>
+      <GameButtons handleClear={handleClear} handleCheck={handleCheck} />
+    </Container>
+  );
 }
 
 const useStyles = makeStyles({
   text: {
-    color: "#ffff"
-  }
+    color: "#ffff",
+  },
 });
 
 function QuestionTitle() {
@@ -93,8 +89,9 @@ function QuestionTitle() {
     <Typography
       variant="h5"
       componenet="h4"
-      gutterBottom="true"
+      gutterBottom={true}
       className={classes.text}
+      align="center"
     >
       Question
     </Typography>
@@ -108,8 +105,9 @@ function Question(props) {
     <Typography
       variant="body1"
       component="h6"
-      gutterBottom="true"
+      gutterBottom={true}
       className={classes.text}
+      align="center"
     >
       {question}
     </Typography>
@@ -122,8 +120,9 @@ function AnswerTitle() {
     <Typography
       variant="h5"
       componenet="h4"
-      gutterBottom="true"
+      gutterBottom={true}
       className={classes.text}
+      align="center"
     >
       Answer
     </Typography>
@@ -134,10 +133,13 @@ function Answer(props) {
   const classes = useStyles();
   const { result } = props;
   return (
-    <Typography variant="body1" component="h6" className={classes.text}>
+    <Typography
+      variant="body1"
+      component="h6"
+      className={classes.text}
+      align="center"
+    >
       {result}
     </Typography>
   );
 }
-
-export default Game;
