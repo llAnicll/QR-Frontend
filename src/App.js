@@ -43,6 +43,12 @@ export class App extends Component {
   // Handles the login
   handleLogin = (e) => {
     e.preventDefault();
+    this.setState({
+      emailErr: "",
+      usernameErr: "",
+      passwordErr: "",
+      passwordAgainErr: "",
+    });
     const { email, password } = this.state;
     const arr = ["email", "password"];
     var emailFlag,
@@ -67,7 +73,6 @@ export class App extends Component {
           }
       }
     });
-    //console.log(this.state.password);
     if (emailFlag === true && passwordFlag === true) {
       axios
         .post("http://localhost:5000/users/login", {
@@ -75,6 +80,7 @@ export class App extends Component {
           password: this.state.password,
         })
         .then((res) => {
+          console.log(res); // testing
           if (res.data.auth) {
             // case: user can login
             localStorage.setItem("userToken", res.data.message); // add the user token to the local storage
@@ -93,14 +99,24 @@ export class App extends Component {
           }
         })
         .catch((err) => {
-          // spit out the error
-          console.log("Sign up server error: " + err);
+          // When there is no network connection
+          this.setState({
+            serverError:
+              "No network connection, please wait untill your back online",
+          });
         });
     }
   };
 
   // Register handeler
   handleRegister = (e) => {
+    e.preventDefault();
+    this.setState({
+      emailErr: "",
+      usernameErr: "",
+      passwordErr: "",
+      passwordAgainErr: "",
+    });
     e.preventDefault();
     const { email, username, password, passwordAgain } = this.state;
     const arr = ["email", "username", "password", "passwordAgain"];
@@ -181,8 +197,11 @@ export class App extends Component {
           });
         })
         .catch((err) => {
-          // spit out the error
-          console.log("Sign up server error: " + err);
+          // cannot reach server
+          this.setState({
+            serverError:
+              "No network connection, please wait untill your back online",
+          });
         });
     }
   };
@@ -243,12 +262,14 @@ export class App extends Component {
             errors={err}
             handleChange={this.handleChange}
             handleLogin={this.handleLogin}
+            handleRegsiterBtn={this.handleRegsiterBtn}
           />
         );
       case 3:
         return (
           <RegisterForm
             errors={err}
+            handleLoginBtn={this.handleLoginBtn}
             handleChange={this.handleChange}
             handleRegister={this.handleRegister}
           />

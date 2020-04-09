@@ -5,21 +5,24 @@ import {
   Container,
   Button,
   Typography,
-  makeStyles
+  makeStyles,
 } from "@material-ui/core";
 
-import Errors from "./General/Errors";
+import Errors from "./General Components/Errors";
 
 const useStyles = makeStyles({
   paper: {
     padding: "1rem",
-    marginTop: "1vh"
-  }
+    marginTop: "1vh",
+  },
+  button: {
+    float: "right",
+  },
 });
 
 export default function RegisterForm(props) {
   const classes = useStyles();
-  const { errors } = props;
+  const { errors, handleRegister } = props;
   return (
     <Container maxWidth="xs">
       <Paper elevation={2} className={classes.paper}>
@@ -36,7 +39,7 @@ export default function RegisterForm(props) {
           variant="outlined"
           fullWidth={true}
           margin="normal"
-          onChange={props.handleEmailChange}
+          onChange={props.handleChange}
         />
 
         <TextField
@@ -46,7 +49,7 @@ export default function RegisterForm(props) {
           variant="outlined"
           fullWidth={true}
           margin="normal"
-          onChange={props.handleUsernameChange}
+          onChange={props.handleChange}
         />
 
         <TextField
@@ -54,9 +57,10 @@ export default function RegisterForm(props) {
           label="Password"
           name="password"
           variant="outlined"
+          type="password"
           fullWidth={true}
           margin="normal"
-          onChange={props.handlePasswordChange}
+          onChange={props.handleChange}
         />
 
         <TextField
@@ -64,15 +68,22 @@ export default function RegisterForm(props) {
           label="Re-type password"
           name="passwordAgain"
           variant="outlined"
+          type="password"
           fullWidth={true}
           margin="normal"
-          onChange={props.handlePasswordAgainChange}
+          onChange={props.handleChange}
         />
+        <p className={classes.p}>
+          <a href="#" onClick={props.handleLoginBtn} className={classes.link}>
+            Already have an account?
+          </a>
+        </p>
         <br />
         <Button
           variant="contained"
           color="primary"
-          onClick={props.handleRegister}
+          className={classes.button}
+          onClick={handleRegister}
         >
           Sign up
         </Button>

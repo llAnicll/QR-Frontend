@@ -5,16 +5,25 @@ import {
   Container,
   Button,
   Typography,
-  makeStyles
+  makeStyles,
 } from "@material-ui/core";
 
-import Errors from "./General/Errors";
+import Errors from "./General Components/Errors";
 
 const useStyles = makeStyles({
   paper: {
     padding: "1rem",
-    marginTop: "1vh"
-  }
+    marginTop: "1vh",
+  },
+  button: {
+    float: "right",
+  },
+  p: {
+    margin: "1rem 0 0 0",
+  },
+  link: {
+    textDecoration: "none",
+  },
 });
 
 export default function RegisterForm(props) {
@@ -44,10 +53,20 @@ export default function RegisterForm(props) {
           label="Password"
           name="password"
           variant="outlined"
+          type="password"
           fullWidth={true}
           margin="normal"
           onChange={props.handleChange}
         />
+        <p className={classes.p}>
+          <a
+            href="#"
+            onClick={props.handleRegsiterBtn}
+            className={classes.link}
+          >
+            Dont have an account?
+          </a>
+        </p>
         <br />
         <Button
           variant="contained"
