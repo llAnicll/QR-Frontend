@@ -24,6 +24,7 @@ export class App extends Component {
       passwordAgainErr: "",
       serverError: "",
     };
+    this.validate = this.validate.bind(this);
   }
 
   // Handles the button the user presses to select login
@@ -40,40 +41,69 @@ export class App extends Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
+  // validates the use input
+  validate(fields) {
+    let validated = [];
+    for (let i = 0; i < fields.length; i++) {
+      validated.push(validator.isEmpty(fields[i]));
+      if (i === 0 && fields[i] === false) {
+        validated[0] = validator.isEmail(fields[i]);
+      } else {
+        this.setState({ emailErr: "No email entered" });
+      }
+      if (validated[i] === true) {
+        if (fields.length === 2 && i === 0) {
+          continue;
+        } else if (fields.length === 2 && i !== 0) {
+          this.setState({ passwordErr: "No password entered" });
+        } else if (fields.length === 4 && i === 0) {
+          continue;
+        } else if (fields.length === 4 && i !== 0) {
+          switch (i) {
+            case 1:
+              this.setState({ usernameErr: "Please enter a username" });
+              continue;
+            case 2:
+              this.setState({ passwordErr: "Please enter a password" });
+              continue;
+            case 3:
+              this.setState({ passwordAgain: "Please re-type your password" });
+              continue;
+          }
+        }
+      } else {
+        if (i === 0) {
+          this.setState({ emailErr: "Invalid email" });
+        }
+      }
+    }
+
+    console.log(validated);
+
+    for (let i = 0; i < validated.length; i++) {
+      if (validated.length === 0) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+
   // Handles the login
   handleLogin = (e) => {
     e.preventDefault();
+    const { email, password } = this.state;
     this.setState({
       emailErr: "",
       usernameErr: "",
       passwordErr: "",
       passwordAgainErr: "",
     });
-    const { email, password } = this.state;
-    const arr = ["email", "password"];
-    var emailFlag,
-      passwordFlag = false;
 
-    arr.forEach((el) => {
-      switch (el) {
-        case "email":
-          if (validator.isEmpty(email)) {
-            this.setState({ emailErr: "No email entered" });
-          } else {
-            this.setState({ emailErr: "" });
-            emailFlag = true;
-          }
-          break;
-        case "password":
-          if (validator.isEmpty(password)) {
-            this.setState({ passwordErr: "No email entered" });
-          } else {
-            this.setState({ passwordErr: "" });
-            passwordFlag = true;
-          }
-      }
-    });
-    if (emailFlag === true && passwordFlag === true) {
+    let fields = [email, password];
+
+    // emailFlag === true && passwordFlag === true
+    if (this.validate(fields)) {
       axios
         .post("http://localhost:5000/users/login", {
           email: this.state.email,
@@ -108,7 +138,7 @@ export class App extends Component {
     }
   };
 
-  // Register handeler
+  // Register handler
   handleRegister = (e) => {
     e.preventDefault();
     this.setState({
@@ -119,67 +149,8 @@ export class App extends Component {
     });
     e.preventDefault();
     const { email, username, password, passwordAgain } = this.state;
-    const arr = ["email", "username", "password", "passwordAgain"];
-    var emailFlag,
-      usernameFlag,
-      passwordFlag,
-      passwordAgainFlag = false;
-
-    arr.forEach((el) => {
-      switch (el) {
-        case "email":
-          if (validator.isEmpty(email)) {
-            this.setState({ emailErr: "No email entered" });
-          } else {
-            if (validator.isEmail(email)) {
-              this.setState({ emailErr: "" });
-              emailFlag = true;
-            } else {
-              this.setState({ emailErr: "Invalid email" });
-            }
-          }
-          break;
-        case "username":
-          if (validator.isEmpty(username)) {
-            this.setState({ usernameErr: "No username entered" });
-          } else {
-            this.setState({ usernameErr: "" });
-            usernameFlag = true;
-          }
-          break;
-        case "password":
-          if (validator.isEmpty(password)) {
-            this.setState({ passwordErr: "No password entered" });
-          } else {
-            this.setState({ passwordErr: "" });
-            passwordFlag = true;
-          }
-          break;
-        case "passwordAgain":
-          if (validator.isEmpty(passwordAgain)) {
-            this.setState({
-              passwordAgainErr: "Please re-type password",
-            });
-          } else {
-            if (passwordAgain !== password) {
-              this.setState({
-                passwordAgainErr: "Passwords do not match",
-              });
-            } else {
-              this.setState({ passwordAgainErr: "" });
-              passwordAgainFlag = true;
-            }
-          }
-          break;
-      }
-    });
-
-    if (
-      emailFlag === true &&
-      usernameFlag === true &&
-      passwordFlag === true &&
-      passwordAgainFlag === true
-    ) {
+    let fields = [email, username, password, passwordAgain];
+    if (this.validate(fields)) {
       // call the user register api
       axios
         .post("http://localhost:5000/users/register", {

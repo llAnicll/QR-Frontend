@@ -4,10 +4,8 @@ import MuiAlert from "@material-ui/lab/Alert";
 import { Container, Snackbar } from "@material-ui/core";
 
 // Components
-import Nav from "./Game Components/General Components/Nav";
 import AppBar from "./Game Components/General Components/AppBar";
 import Main from "./Game Components/Main";
-import Leaderboard from "./Game Components/Leaderboard";
 import Game from "./Game Components/Game Interface Components/Game Interface";
 import GameOver from "./Game Components/GameOver";
 
@@ -177,18 +175,6 @@ export default class GameHome extends Component {
               handleLogout={this.props.handleLogout}
             />
             <Main handleStart={this.handleStart} />
-            <Nav handleChange={this.handleChange} value={page} />
-          </Container>
-        );
-      case "leaderboard": // Leaderboard Page
-        return (
-          <Container maxWidth="xs">
-            <AppBar
-              username={username}
-              handleLogout={this.props.handleLogout}
-            />
-            <Leaderboard />
-            <Nav handleChange={this.handleChange} value={page} />
           </Container>
         );
       case "game": // The actual game the user plays
