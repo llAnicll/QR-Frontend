@@ -18,6 +18,7 @@ export class App extends Component {
       username: "",
       password: "",
       passwordAgain: "",
+      type: 1,
       emailErr: "",
       usernameErr: "",
       passwordErr: "",
@@ -46,9 +47,16 @@ export class App extends Component {
     let validated = [];
     for (let i = 0; i < fields.length; i++) {
       validated.push(validator.isEmpty(fields[i]));
-      if (i === 0 && fields[i] === false) {
-        validated[0] = validator.isEmail(fields[i]);
-      } else {
+      if (i === 0 && validated[0] === false) {
+        validated[i] = validator.isEmail(fields[i]);
+
+        if (i === 0 && validated[0] === false) {
+          this.setState({ emailErr: "Invalid email" });
+        } else {
+          this.setState({ emailErr: "" });
+        }
+      } else if (i === 0 && validated[0] === true) {
+        console.log(this.state.emailErr);
         this.setState({ emailErr: "No email entered" });
       }
       if (validated[i] === true) {
@@ -67,21 +75,25 @@ export class App extends Component {
               this.setState({ passwordErr: "Please enter a password" });
               continue;
             case 3:
-              this.setState({ passwordAgain: "Please re-type your password" });
+              this.setState({
+                passwordAgainErr: "Please re-type your password",
+              });
               continue;
           }
-        }
-      } else {
-        if (i === 0) {
-          this.setState({ emailErr: "Invalid email" });
         }
       }
     }
 
-    console.log(validated);
+    if (fields.length === 4 && fields[2] !== fields[3]) {
+      this.setState({ passwordAgainErr: "Passwords do not match" });
+      validated[3] = true;
+    }
 
     for (let i = 0; i < validated.length; i++) {
-      if (validated.length === 0) {
+      if (i === 0 && validated[i] === true) {
+        continue;
+      }
+      if (i !== 0 && validated[i] === false) {
         return true;
       } else {
         return false;
@@ -93,13 +105,14 @@ export class App extends Component {
   handleLogin = (e) => {
     e.preventDefault();
     const { email, password } = this.state;
+    console.log("Email: " + email);
+
     this.setState({
       emailErr: "",
       usernameErr: "",
       passwordErr: "",
       passwordAgainErr: "",
     });
-
     let fields = [email, password];
 
     // emailFlag === true && passwordFlag === true
@@ -110,13 +123,15 @@ export class App extends Component {
           password: this.state.password,
         })
         .then((res) => {
-          console.log(res); // testing
           if (res.data.auth) {
             // case: user can login
             localStorage.setItem("userToken", res.data.message); // add the user token to the local storage
+            localStorage.setItem("username", res.data.username); // add the username to the localStorage
+            localStorage.setItem("accountType", res.data.type); // add the user account type to localStorage
             this.setState({
               email: res.data.email,
               username: res.data.username,
+              type: res.data.type,
               serverError: "",
               page: 4,
             });
@@ -188,6 +203,8 @@ export class App extends Component {
       page: 1,
     });
     localStorage.removeItem("userToken");
+    localStorage.removeItem("username");
+    localStorage.removeItem("accountType");
   };
 
   render() {
@@ -250,6 +267,7 @@ export class App extends Component {
           <GameHome
             username={username}
             email={email}
+            type={this.state.type}
             handleLogout={this.handleLogout}
           />
         );

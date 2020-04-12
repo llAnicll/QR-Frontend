@@ -2,12 +2,15 @@ import React, { Component } from "react";
 import axios from "axios";
 import MuiAlert from "@material-ui/lab/Alert";
 import { Container, Snackbar } from "@material-ui/core";
+import validator from "validator";
 
 // Components
 import AppBar from "./Game Components/General Components/AppBar";
 import Main from "./Game Components/Main";
 import Game from "./Game Components/Game Interface Components/Game Interface";
 import GameOver from "./Game Components/GameOver";
+import Nav from "./Game Components/General Components/Nav";
+import Admin from "./Game Components/Admin";
 
 export default class GameHome extends Component {
   constructor(props) {
@@ -16,6 +19,7 @@ export default class GameHome extends Component {
       page: "main",
       email: this.props.email,
       username: this.props.username,
+      type: "",
       quiz: [],
       aq: "",
       index: 0,
@@ -26,8 +30,55 @@ export default class GameHome extends Component {
       severity: "",
       feedback: "",
       gameEnd: "",
+      question: "",
+      answer: "",
+      questionErr: "",
+      answerErr: "",
+      submited: false,
     };
   }
+
+  handleAdminChange = (e) => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
+
+  handleSubmit = (e) => {
+    this.setState({
+      questionErr: "",
+      answerErr: "",
+    });
+    const { question, answer } = this.state;
+    let questionFlag = false;
+    let answerFlag = false;
+    if (validator.isEmpty(question)) {
+      questionFlag = true;
+      this.setState({ questionErr: "No question entered" });
+    }
+    if (validator.isEmpty(answer)) {
+      answerFlag = true;
+      this.setState({ answerErr: "No answer entered" });
+    }
+
+    console.log(this.state.questionErr);
+
+    if (questionFlag === false && answerFlag === false) {
+      axios
+        .post("http://localhost:5000/questions/makeQuestion", {
+          question: this.state.question,
+          answer: this.state.answer,
+        })
+        .then((res) => {
+          document.getElementById("outlined-basic").value = "";
+        })
+        .catch((err) => {
+          // cannot reach server
+          this.setState({
+            serverError:
+              "No network connection, please wait untill your back online",
+          });
+        });
+    }
+  };
 
   // handle nav change
   handleChange = (e, newValue) => {
@@ -150,6 +201,25 @@ export default class GameHome extends Component {
     this.setState({ result: "" });
   }
 
+  componentDidMount() {
+    var user = "";
+    var accountType = "";
+    if (localStorage.getItem("username")) {
+      user = localStorage.getItem("username");
+    } else {
+      user = "";
+    }
+    if (localStorage.getItem("accountType")) {
+      accountType = localStorage.getItem("accountType");
+    } else {
+      accountType = this.props.type;
+    }
+    this.setState({
+      username: user,
+      type: accountType,
+    });
+  }
+
   render() {
     const {
       page,
@@ -164,19 +234,43 @@ export default class GameHome extends Component {
       feedback,
       quiz,
       gameEnd,
+      type,
+      submited,
     } = this.state;
+
+    let errors = [];
+    if (this.state.questionErr.length > 0) {
+      errors.push({ err: this.state.questionErr });
+    }
+    if (this.state.answerErr.length > 0) {
+      errors.push({ err: this.state.answerErr });
+    }
 
     switch (page) {
       case "main": // The main page where user can start the game
-        return (
-          <Container maxWidth="xs">
-            <AppBar
-              username={username}
-              handleLogout={this.props.handleLogout}
-            />
-            <Main handleStart={this.handleStart} />
-          </Container>
-        );
+        if (type === "2") {
+          return (
+            <Container maxWidth="xs">
+              <AppBar
+                username={username}
+                handleLogout={this.props.handleLogout}
+              />
+              <Main handleStart={this.handleStart} />
+              <Nav handleChange={this.handleChange} page={page} />
+            </Container>
+          );
+        } else {
+          return (
+            <Container maxWidth="xs">
+              <AppBar
+                username={username}
+                handleLogout={this.props.handleLogout}
+              />
+              <Main handleStart={this.handleStart} />
+            </Container>
+          );
+        }
+
       case "game": // The actual game the user plays
         return (
           <Container maxWidth="xs">
@@ -210,6 +304,22 @@ export default class GameHome extends Component {
             lives={lives}
             page={gameEnd}
           />
+        );
+      case "add":
+        return (
+          <Container maxWidth="xs">
+            <AppBar
+              username={username}
+              handleLogout={this.props.handleLogout}
+            />
+            <Admin
+              errors={errors}
+              submited={submited}
+              handleSubmit={this.handleSubmit}
+              handleChange={this.handleAdminChange}
+            />
+            <Nav handleChange={this.handleChange} value={page} />
+          </Container>
         );
     }
   }
