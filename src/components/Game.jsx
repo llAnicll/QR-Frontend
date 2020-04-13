@@ -80,6 +80,14 @@ export default class GameHome extends Component {
     }
   };
 
+  handleAdmin = (e) => {
+    this.setState({ page: "add" });
+  };
+
+  handleHome = (e) => {
+    this.setState({ page: "main" });
+  };
+
   // handle nav change
   handleChange = (e, newValue) => {
     e.preventDefault();
@@ -245,6 +253,7 @@ export default class GameHome extends Component {
     if (this.state.answerErr.length > 0) {
       errors.push({ err: this.state.answerErr });
     }
+    let width = window.innerWidth;
 
     switch (page) {
       case "main": // The main page where user can start the game
@@ -254,9 +263,14 @@ export default class GameHome extends Component {
               <AppBar
                 username={username}
                 handleLogout={this.props.handleLogout}
+                handleMenuButton={this.handleMenuButton}
+                handleAdmin={this.handleAdmin}
+                handleStart={this.handleStart}
               />
               <Main handleStart={this.handleStart} />
-              <Nav handleChange={this.handleChange} page={page} />
+              {width < 768 ? (
+                <Nav handleChange={this.handleChange} page={page} />
+              ) : null}
             </Container>
           );
         } else {
@@ -265,6 +279,8 @@ export default class GameHome extends Component {
               <AppBar
                 username={username}
                 handleLogout={this.props.handleLogout}
+                handleMenuButton={this.handleMenuButton}
+                handleStart={this.handleStart}
               />
               <Main handleStart={this.handleStart} />
             </Container>
@@ -280,6 +296,10 @@ export default class GameHome extends Component {
               page={this.state.page}
               lives={lives}
               score={score}
+              handleMenuButton={this.handleMenuButton}
+              handleStart={this.handleStart}
+              handleCancel={this.handleCancel}
+              handleCheck={this.handleCheck}
             />
             <Game
               result={result}
@@ -311,6 +331,8 @@ export default class GameHome extends Component {
             <AppBar
               username={username}
               handleLogout={this.props.handleLogout}
+              handleHome={this.handleHome}
+              handleStart={this.handleStart}
             />
             <Admin
               errors={errors}
@@ -318,7 +340,9 @@ export default class GameHome extends Component {
               handleSubmit={this.handleSubmit}
               handleChange={this.handleAdminChange}
             />
-            <Nav handleChange={this.handleChange} value={page} />
+            {width < 768 ? (
+              <Nav handleChange={this.handleChange} page={page} />
+            ) : null}
           </Container>
         );
     }

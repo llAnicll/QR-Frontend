@@ -17,10 +17,15 @@ const useStyles = makeStyles({
 
 export default function GameButtons(props) {
   const classes = useStyles();
-  return (
-    <Container maxWidth="sm" className={classes.root}>
-      <Cancel handleClear={props.handleClear} />
-      <Check handleCheck={props.handleCheck} />
-    </Container>
-  );
+  let width = window.innerWidth;
+  if (width < 768) {
+    return (
+      <Container maxWidth="sm" className={classes.root}>
+        <Cancel handleClear={props.handleClear} />
+        <Check handleCheck={props.handleCheck} />
+      </Container>
+    );
+  } else {
+    return null;
+  }
 }

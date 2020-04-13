@@ -34,6 +34,9 @@ function calcWidth() {
 const previewStyle = {
   width: calcWidth(),
 };
+const previewDesktopStyle = {
+  width: 400,
+};
 
 const useStyles = makeStyles({
   paper: {
@@ -41,10 +44,22 @@ const useStyles = makeStyles({
     padding: "0.5rem",
     textAlign: "center",
   },
+  paperTwo: {
+    marginTop: getWindowHeight() * 0.05,
+    padding: "0.5rem",
+    textAlign: "center",
+    width: "24rem",
+  },
   paperAnswer: {
     marginTop: getWindowHeight() * 0.02,
     padding: "0.5rem",
     textAlign: "center",
+  },
+  paperAnswerTwo: {
+    marginTop: getWindowHeight() * 0.02,
+    padding: "0.5rem",
+    textAlign: "center",
+    width: "24rem",
   },
   text: {
     color: "#ffff",
@@ -67,86 +82,82 @@ export default function Game(props) {
     handleClear,
     handleClose,
   } = props;
-
-  return (
-    <Container maxWidth="sm">
-      <Snackbar
-        open={open}
-        autoHideDuration={3000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical, horizontal }}
-      >
-        <Alert onClose={handleClose} severity={severity}>
-          {feedback}
-        </Alert>
-      </Snackbar>
+  let width = window.innerWidth;
+  if (width > 768) {
+    return (
       <Container maxWidth="sm">
-        <QrReader
-          delay={300}
-          onError={handleError}
-          onScan={handleScan}
-          style={previewStyle}
-        />
-      </Container>
-      <Container maxWidth="sm">
-        <Paper elevation={3} className={classes.paper}>
-          <QuestionTitle />
-          <Question question={question} />
-        </Paper>
-      </Container>
+        <Snackbar
+          open={open}
+          autoHideDuration={3000}
+          onClose={handleClose}
+          anchorOrigin={{ vertical, horizontal }}
+        >
+          <Alert onClose={handleClose} severity={severity}>
+            {feedback}
+          </Alert>
+        </Snackbar>
+        <Container maxWidth="sm">
+          <QrReader
+            delay={300}
+            onError={handleError}
+            onScan={handleScan}
+            style={previewDesktopStyle}
+          />
+        </Container>
+        <Container maxWidth="sm">
+          <Paper elevation={3} className={classes.paperTwo}>
+            <QuestionTitle />
+            <Question question={question} />
+          </Paper>
+        </Container>
 
-      <Container maxWidth="sm">
-        <Paper elevation={3} className={classes.paperAnswer}>
-          <AnswerTitle />
-          <Answer result={result} />
-        </Paper>
+        <Container maxWidth="sm">
+          <Paper elevation={3} className={classes.paperAnswerTwo}>
+            <AnswerTitle />
+            <Answer result={result} />
+          </Paper>
+        </Container>
+        <GameButtons handleClear={handleClear} handleCheck={handleCheck} />
       </Container>
-      <GameButtons handleClear={handleClear} handleCheck={handleCheck} />
-    </Container>
-  );
-
-  /*
-  return (
-    <Container maxWidth="sm">
-      <Snackbar
-        open={open}
-        autoHideDuration={3000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical, horizontal }}
-      >
-        <Alert onClose={handleClose} severity={severity}>
-          {feedback}
-        </Alert>
-      </Snackbar>
-      <Grid
-        container
-        direction="column"
-        justify="center"
-        alignItems="center"
-        spacing={3}
-      >
-        <Grid item>
+    );
+  } else {
+    return (
+      <Container maxWidth="sm">
+        <Snackbar
+          open={open}
+          autoHideDuration={3000}
+          onClose={handleClose}
+          anchorOrigin={{ vertical, horizontal }}
+        >
+          <Alert onClose={handleClose} severity={severity}>
+            {feedback}
+          </Alert>
+        </Snackbar>
+        <Container maxWidth="sm">
           <QrReader
             delay={300}
             onError={handleError}
             onScan={handleScan}
             style={previewStyle}
           />
-        </Grid>
-        <Grid item>
-          <QuestionTitle />
-          <Question question={question} />
-        </Grid>
+        </Container>
+        <Container maxWidth="sm">
+          <Paper elevation={3} className={classes.paper}>
+            <QuestionTitle />
+            <Question question={question} />
+          </Paper>
+        </Container>
 
-        <Grid item>
-          <AnswerTitle />
-          <Answer result={result} />
-        </Grid>
-      </Grid>
-      <GameButtons handleClear={handleClear} handleCheck={handleCheck} />
-    </Container>
-  );
-  */
+        <Container maxWidth="sm">
+          <Paper elevation={3} className={classes.paperAnswer}>
+            <AnswerTitle />
+            <Answer result={result} />
+          </Paper>
+        </Container>
+        <GameButtons handleClear={handleClear} handleCheck={handleCheck} />
+      </Container>
+    );
+  }
 }
 
 function QuestionTitle() {
