@@ -127,7 +127,7 @@ export default function Admin(props) {
             onClick={handleSubmit}
             className={classes.button}
           >
-            Login
+            Submit
           </Button>
         </Paper>
       </Container>

@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
     color: "#ffff",
   },
   exit: {
-    color: "rgb(0,0,0)",
+    color: "rgb(255,255,255)",
   },
   root: {
     display: "flex",
@@ -82,7 +82,7 @@ export default function Status(props) {
                 onClick={props.handleQuit}
               >
                 <ListItemIcon>
-                  <ExitToAppIcon />
+                  <ExitToAppIcon className={classes.exit} />
                 </ListItemIcon>
                 <ListItemText primary="Exit" />
               </ListItem>
